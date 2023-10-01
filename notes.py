@@ -1,12 +1,18 @@
-from PyQt5.QtWidgets import QLabel, QPushButton, QLineEdit, QTextEdit, QListWidget, QApplication, QWidget, QVBoxLayout, QHBoxLayout
+from PyQt5.QtWidgets import QLabel, QPushButton, QLineEdit, QTextEdit, QListWidget, QApplication, QWidget, QVBoxLayout, QHBoxLayout, QInputDialog
 
 app = QApplication([])
+
+import json
+
+
+
+
 
 main = QWidget()
 main.resize(900,600)
 
 text = QTextEdit()
-button0 = QPushButton()
+button0 = QPushButton('Створити замітку')
 button1 = QPushButton()
 button2 = QPushButton()
 button3 = QPushButton()
@@ -48,6 +54,27 @@ h3 = QHBoxLayout()
 h3.addLayout(v1)
 h3.addLayout(v2)
 main.setLayout(h3)
+
+def show_notes():
+    key = list0.selectedItems()[0].text()
+    text.setText(notes[key]["текст"])
+
+def add_notes():
+    dialog, ok = QInputDialog.getText(main,'додати замітку','назва замітки:')
+    if dialog and ok != "":
+        notes[dialog] = {'текст':"","теги":[]}
+        list0.addItem(dialog)
+
+
+
+
+list0.itemClicked.connect(show_notes)
+button0.clicked.connect(add_notes)
+
+with open("f.json", "r") as file:
+    notes = json.load(file)
+list0.addItems(notes)
+
 
 
 
